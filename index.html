@@ -1,0 +1,1311 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>AWAN — Objets pour l’instant</title>
+  <meta name="description" content="AWAN — Objets pour l’instant. Une maison qui respire, un luxe calme, un rapport au temps retrouvé." />
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+  <style>
+    :root{
+      --bg:#ffffff;
+      --ink:#0f0f10;
+      --muted:#5e5e61;
+
+      /* Or (accordé au logo — ajuste ici si tu changes la teinte du PNG) */
+      --gold:#b8943e;
+      --gold2:#e7d59a;
+
+      --radius: 18px;
+      --radiusPill: 999px;
+      --border: 1px solid rgba(15,15,16,.10);
+
+      --shadow: 0 18px 55px rgba(0,0,0,.08);
+      --shadowSoft: 0 14px 42px rgba(0,0,0,.10);
+      --shadowGold: 0 18px 55px rgba(184,148,62,.18);
+
+      --serif: "Playfair Display", serif;
+      --sans: "Inter", system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+
+      --container: min(1120px, calc(100% - 44px));
+    }
+
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;
+      background:var(--bg);
+      color:var(--ink);
+      font-family:var(--sans);
+      line-height:1.6;
+      overflow-x:hidden;
+    }
+
+    a{color:inherit; text-decoration:none}
+    img{max-width:100%; display:block}
+
+    .container{width:var(--container); margin:0 auto;}
+
+    /* =========================
+       HERO (page de garde)
+    ========================== */
+    .hero{
+      position:relative;
+      min-height:100svh;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      padding: 26px 18px;
+      overflow:hidden;
+      isolation:isolate;
+    }
+
+    /* Diaporama fond */
+    .hero-stage{position:absolute; inset:0; z-index:0;}
+    .hero-slide{
+      position:absolute; inset:0;
+      background-size:cover;
+      background-position:center;
+      opacity:0;
+      transform: scale(1.06);
+      transition: opacity 1.25s ease, transform 7s ease;
+      filter: saturate(1.02) contrast(1.02);
+      will-change: opacity, transform;
+    }
+    .hero-slide.is-active{opacity:1; transform: scale(1.02);}
+
+    /* Overlay blanc: lisible sans "délaver" */
+    .hero-veil{
+      position:absolute; inset:0; z-index:1;
+      background:
+        radial-gradient(closest-side at 50% 42%, rgba(255,255,255,.88), rgba(255,255,255,.56) 55%, rgba(255,255,255,.26) 82%),
+        linear-gradient(90deg, rgba(255,255,255,.64), rgba(255,255,255,.26) 56%, rgba(255,255,255,.58));
+    }
+    .hero-aura{
+      position:absolute; inset:-60px; z-index:2;
+      pointer-events:none;
+      opacity:.55;
+      background:
+        radial-gradient(560px 420px at 20% 46%, rgba(184,148,62,.20), transparent 70%),
+        radial-gradient(700px 520px at 78% 62%, rgba(231,213,154,.18), transparent 72%);
+      filter: blur(18px);
+      mix-blend-mode:multiply;
+    }
+    .hero-grain{
+      position:absolute; inset:-40px; z-index:3;
+      opacity:.07; pointer-events:none;
+      background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='180' height='180' filter='url(%23n)' opacity='.45'/%3E%3C/svg%3E");
+      mix-blend-mode:multiply;
+    }
+
+    /* Bloc central */
+    .hero-center{
+      position:relative;
+      z-index:4;
+      width:min(980px, 100%);
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      justify-content:center;
+      text-align:center;
+      gap: 18px;
+      padding: 34px 18px;
+    }
+
+    /* Logo très grand, centré */
+    .logo-hero{
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      opacity:0;
+      transform: translateY(10px) scale(.99);
+      animation: logoEnter 1.0s cubic-bezier(.18,.8,.18,1) .10s forwards;
+    }
+    @keyframes logoEnter{
+      0%   {opacity:0; transform: translateY(10px) scale(.99);}
+      60%  {opacity:1; transform: translateY(0) scale(1.01);}
+      100% {opacity:1; transform: translateY(0) scale(1);}
+    }
+    .logo-hero img{
+      width: min(860px, 92vw);
+      height:auto;
+      filter: drop-shadow(0 16px 34px rgba(0,0,0,.16));
+    }
+
+    /* Pills nav sous logo */
+    .pill-row{
+      display:flex;
+      flex-wrap:wrap;
+      gap: 14px;
+      justify-content:center;
+      align-items:center;
+      margin-top: 6px;
+    }
+
+    .pill{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      gap:10px;
+      padding: 12px 18px;
+      border-radius: var(--radiusPill);
+      border: var(--border);
+      background: rgba(255,255,255,.58);
+      backdrop-filter: blur(10px);
+      font-size: 12px;
+      letter-spacing: .16em;
+      text-transform: uppercase;
+      color:#222;
+      box-shadow: 0 10px 34px rgba(0,0,0,.06);
+      transition: transform .15s ease, background .15s ease, box-shadow .15s ease;
+      user-select:none;
+    }
+    .pill:hover{
+      transform: translateY(-1px);
+      background: rgba(184,148,62,.10);
+      box-shadow: 0 14px 42px rgba(0,0,0,.10);
+    }
+    .pill:focus-visible{
+      outline: 3px solid rgba(184,148,62,.35);
+      outline-offset: 3px;
+    }
+
+    .pill.gold{
+      border-color: rgba(184,148,62,.35);
+      background: linear-gradient(135deg, rgba(184,148,62,.92), rgba(231,213,154,.88));
+      box-shadow: var(--shadowGold);
+    }
+    .pill.gold:hover{background: linear-gradient(135deg, rgba(184,148,62,.96), rgba(231,213,154,.92));}
+
+    /* Accès Newsletter (discret mais accessible) */
+    .hero-tools{
+      position:absolute;
+      top: 18px;
+      right: 18px;
+      z-index:5;
+      display:flex;
+      gap:10px;
+      align-items:center;
+    }
+    .tool{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      padding: 10px 14px;
+      border-radius: var(--radiusPill);
+      border: var(--border);
+      background: rgba(255,255,255,.62);
+      backdrop-filter: blur(10px);
+      font-size: 12px;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+      cursor:pointer;
+      transition: transform .15s ease, background .15s ease;
+      box-shadow: 0 10px 30px rgba(0,0,0,.06);
+    }
+    .tool:hover{transform: translateY(-1px); background: rgba(184,148,62,.10);}
+    .tool:focus-visible{outline: 3px solid rgba(184,148,62,.35); outline-offset: 3px;}
+    .tool.gold{
+      border-color: rgba(184,148,62,.35);
+      background: linear-gradient(135deg, rgba(184,148,62,.92), rgba(231,213,154,.88));
+    }
+
+    /* =========================
+       SECTIONS
+    ========================== */
+    main{background:#fff;}
+    section{
+      padding: 64px 0;
+      position:relative;
+    }
+    .section-head{
+      display:flex;
+      align-items:flex-end;
+      justify-content:space-between;
+      gap:18px;
+      margin-bottom: 18px;
+    }
+    .kicker{
+      font-size:11px;
+      letter-spacing:.28em;
+      text-transform:uppercase;
+      color:#2f2f31;
+      display:flex;
+      align-items:center;
+      gap:10px;
+    }
+    .kicker .line{
+      height:1px;
+      width: 56px;
+      background: linear-gradient(90deg, rgba(184,148,62,.60), rgba(15,15,16,0));
+      border-radius: 999px;
+    }
+
+    h2{
+      margin: 8px 0 10px;
+      font-family: var(--serif);
+      font-weight: 600;
+      font-size: clamp(24px, 2.2vw, 34px);
+      letter-spacing:.02em;
+      line-height:1.15;
+    }
+    .sub{
+      margin:0;
+      color: var(--muted);
+      max-width: 78ch;
+      font-size: 15px;
+    }
+
+    .card{
+      border: var(--border);
+      background: rgba(255,255,255,.92);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+    }
+
+    .grid-3{display:grid; grid-template-columns: repeat(3, 1fr); gap:14px;}
+    .grid-2{display:grid; grid-template-columns: 1.1fr .9fr; gap:14px;}
+    .pad{padding: 18px;}
+    .pad-lg{padding: 22px;}
+
+    .mini-title{
+      margin: 8px 0 6px;
+      font-family: var(--serif);
+      font-weight: 600;
+      letter-spacing:.02em;
+      font-size: 18px;
+    }
+    .muted{color:var(--muted); margin:0; font-size:14px; line-height:1.65;}
+
+    /* Collection */
+    .products{display:grid; grid-template-columns: repeat(4, 1fr); gap:14px;}
+    .p-card{overflow:hidden; cursor: zoom-in; transition: transform .2s ease, box-shadow .2s ease;}
+    .p-card:hover{transform: translateY(-2px); box-shadow: var(--shadowSoft);}
+    .p-img{height: 190px; width:100%; object-fit:cover;}
+    .p-body{padding: 14px 14px 16px;}
+    .tag{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      padding: 7px 10px;
+      border-radius: 999px;
+      border: 1px solid rgba(184,148,62,.28);
+      background: rgba(184,148,62,.08);
+      font-size: 11px;
+      letter-spacing: .18em;
+      text-transform: uppercase;
+      color:#2b2b2b;
+    }
+    .price{
+      margin-left:auto;
+      font-size: 12px;
+      color:#2b2b2b;
+      letter-spacing:.12em;
+      text-transform: uppercase;
+      opacity:.85;
+    }
+    .p-top{display:flex; gap:10px; align-items:center; justify-content:space-between; margin-bottom: 10px;}
+    .p-name{margin: 8px 0 6px; font-family: var(--serif); font-weight: 600; letter-spacing:.02em;}
+    .p-desc{margin:0; color:var(--muted); font-size:14px; line-height:1.6;}
+
+    /* Galerie “ambiance” */
+    .gallery{
+      display:grid;
+      grid-template-columns: 1.2fr .8fr;
+      gap:14px;
+      align-items:stretch;
+      margin-top: 14px;
+    }
+    .g-big, .g-small{overflow:hidden; cursor: zoom-in;}
+    .g-big img{width:100%; height:100%; object-fit:cover; aspect-ratio: 16 / 10;}
+    .g-side{display:grid; grid-template-rows: repeat(2, 1fr); gap:14px;}
+    .g-small img{width:100%; height:100%; object-fit:cover; aspect-ratio: 16 / 10;}
+
+    /* Aide / FAQ */
+    details{
+      border: var(--border);
+      border-radius: 14px;
+      background: rgba(255,255,255,.92);
+      box-shadow: 0 10px 34px rgba(0,0,0,.06);
+      overflow:hidden;
+    }
+    summary{
+      cursor:pointer;
+      list-style:none;
+      padding: 14px 16px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      font-weight: 600;
+    }
+    summary::-webkit-details-marker{display:none;}
+    .faq-body{
+      padding: 0 16px 14px;
+      color: var(--muted);
+      font-size: 14px;
+      line-height:1.65;
+    }
+    .chev{opacity:.7}
+
+    /* Contact */
+    form{display:grid; gap:12px;}
+    .field{display:grid; gap:6px;}
+    label{font-size:12px; letter-spacing:.14em; text-transform:uppercase; color:#2b2b2b;}
+    input, textarea{
+      width:100%;
+      padding: 12px 12px;
+      border-radius: 14px;
+      border: 1px solid rgba(15,15,16,.12);
+      background: rgba(255,255,255,.92);
+      outline:none;
+      font-family: var(--sans);
+      font-size: 14px;
+    }
+    textarea{min-height: 120px; resize: vertical;}
+    input:focus, textarea:focus{border-color: rgba(184,148,62,.45); box-shadow: 0 0 0 4px rgba(184,148,62,.12);}
+
+    .btn{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      padding: 12px 16px;
+      border-radius: 999px;
+      border: var(--border);
+      background: rgba(255,255,255,.90);
+      font-size: 12px;
+      letter-spacing:.14em;
+      text-transform: uppercase;
+      cursor:pointer;
+      transition: transform .15s ease, background .15s ease, box-shadow .15s ease;
+      user-select:none;
+    }
+    .btn:hover{transform: translateY(-1px); background: rgba(184,148,62,.10); box-shadow: 0 14px 42px rgba(0,0,0,.10);}
+    .btn.gold{
+      border-color: rgba(184,148,62,.35);
+      background: linear-gradient(135deg, rgba(184,148,62,.92), rgba(231,213,154,.88));
+    }
+
+    .socials{display:flex; flex-wrap:wrap; gap:10px; margin-top: 12px;}
+    .socials a{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      padding: 10px 12px;
+      border-radius: 999px;
+      border: var(--border);
+      background: rgba(255,255,255,.92);
+      font-size: 12px;
+      letter-spacing:.10em;
+      text-transform: uppercase;
+      transition: transform .15s ease, background .15s ease;
+    }
+    .socials a:hover{transform: translateY(-1px); background: rgba(184,148,62,.10);}
+
+    /* Footer */
+    footer{
+      border-top: var(--border);
+      padding: 28px 0 34px;
+      color: var(--muted);
+      font-size: 13px;
+      background:#fff;
+    }
+    .foot-top{
+      display:flex;
+      flex-wrap:wrap;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+      margin-bottom: 14px;
+    }
+    .foot-links{
+      display:flex;
+      flex-wrap:wrap;
+      gap:10px;
+      align-items:center;
+    }
+    .foot-links a{
+      padding: 8px 10px;
+      border-radius: 999px;
+      border: 1px solid rgba(184,148,62,.22);
+      background: rgba(184,148,62,.06);
+    }
+    .foot-brand{
+      display:flex;
+      align-items:center;
+      gap:10px;
+      opacity:.95;
+    }
+    .foot-brand img{
+      height: 22px;
+      width:auto;
+      filter: drop-shadow(0 10px 24px rgba(184,148,62,.14));
+    }
+    .foot-note{opacity:.9; margin:0; line-height:1.6;}
+    .gold{color: var(--gold);}
+
+    /* =========================
+       MODALS (Newsletter + Lightbox)
+    ========================== */
+    .modal{
+      position:fixed; inset:0;
+      display:none;
+      align-items:center;
+      justify-content:center;
+      padding: 20px;
+      z-index: 2000;
+      background: rgba(10,10,10,.55);
+      backdrop-filter: blur(10px);
+    }
+    .modal.is-open{display:flex;}
+    .modal-card{
+      width: min(860px, 100%);
+      border-radius: 18px;
+      overflow:hidden;
+      background: rgba(255,255,255,.94);
+      border: 1px solid rgba(255,255,255,.20);
+      box-shadow: 0 30px 90px rgba(0,0,0,.35);
+    }
+    .modal-head{
+      display:flex;
+      align-items:flex-start;
+      justify-content:space-between;
+      gap:12px;
+      padding: 18px;
+      border-bottom: 1px solid rgba(15,15,16,.10);
+      background: rgba(255,255,255,.96);
+    }
+    .modal-title{
+      margin:0;
+      font-family: var(--serif);
+      font-weight: 600;
+      letter-spacing:.02em;
+    }
+    .modal-close{
+      border: 1px solid rgba(184,148,62,.35);
+      background:#fff;
+      border-radius: 999px;
+      padding: 8px 12px;
+      cursor:pointer;
+      font-size: 12px;
+      letter-spacing:.12em;
+      text-transform: uppercase;
+    }
+    .modal-body{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+      padding: 18px;
+      background: rgba(255,255,255,.90);
+    }
+    .modal-body img{
+      width:100%;
+      height:100%;
+      object-fit:cover;
+      border-radius: 14px;
+      border: 1px solid rgba(0,0,0,.06);
+      aspect-ratio: 4 / 3;
+    }
+    .fineprint{
+      font-size: 12px;
+      color: var(--muted);
+      line-height: 1.55;
+      margin-top: 10px;
+    }
+    .fineprint a{
+      color: var(--gold);
+      text-decoration: underline;
+      text-underline-offset: 3px;
+    }
+
+    /* Lightbox */
+    .lightbox .modal-card{width:min(1080px, 100%);}
+    .lightbox-inner{
+      background: rgba(255,255,255,.94);
+      display:flex;
+      flex-direction:column;
+    }
+    .lightbox-inner img{
+      width:100%;
+      height:auto;
+      max-height: 82vh;
+      object-fit:contain;
+      background:#fff;
+    }
+    .lb-bar{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+      padding: 12px 14px;
+      border-top: 1px solid rgba(15,15,16,.10);
+      background: rgba(255,255,255,.96);
+      font-size: 12px;
+      letter-spacing:.14em;
+      text-transform: uppercase;
+      color:#222;
+    }
+
+    /* =========================
+       COOKIE BANNER
+    ========================== */
+    .cookie{
+      position:fixed;
+      left:16px; right:16px; bottom:16px;
+      z-index: 1800;
+      display:none;
+    }
+    .cookie.is-open{display:block;}
+    .cookie-card{
+      width:min(980px, 100%);
+      margin:0 auto;
+      background: rgba(255,255,255,.94);
+      border: var(--border);
+      border-radius: 16px;
+      box-shadow: 0 18px 55px rgba(0,0,0,.18);
+      padding: 14px 14px;
+      display:flex;
+      flex-wrap:wrap;
+      gap:10px;
+      align-items:center;
+      justify-content:space-between;
+    }
+    .cookie p{
+      margin:0;
+      color: var(--muted);
+      font-size: 13px;
+      max-width: 78ch;
+      line-height:1.55;
+    }
+    .cookie-actions{display:flex; gap:10px; flex-wrap:wrap;}
+
+    /* =========================
+       RESPONSIVE
+    ========================== */
+    @media (max-width: 980px){
+      .grid-2{grid-template-columns: 1fr;}
+      .grid-3{grid-template-columns: 1fr;}
+      .products{grid-template-columns: repeat(2, 1fr);}
+      .gallery{grid-template-columns: 1fr;}
+      .modal-body{grid-template-columns: 1fr;}
+    }
+    @media (max-width: 520px){
+      .hero-tools{top: 12px; right: 12px;}
+      .pill-row{gap:10px}
+      .pill{padding: 11px 14px}
+      .products{grid-template-columns: 1fr;}
+      section{padding: 56px 0;}
+    }
+
+    @media (prefers-reduced-motion: reduce){
+      .hero-slide{transition:none !important;}
+      .logo-hero{animation:none !important; opacity:1; transform:none;}
+      .pill, .tool, .p-card{transition:none !important;}
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- HERO -->
+  <header class="hero" id="top" aria-label="Page de garde AWAN">
+    <div class="hero-stage" aria-hidden="true">
+      <div class="hero-slide is-active" style="background-image:url('assets/magnetic-set.jpg')"></div>
+      <div class="hero-slide" style="background-image:url('assets/vases.jpg')"></div>
+      <div class="hero-slide" style="background-image:url('assets/gallery-2.jpg')"></div>
+      <div class="hero-slide" style="background-image:url('assets/cloches.jpg')"></div>
+      <div class="hero-slide" style="background-image:url('assets/gallery-1.jpg')"></div>
+    </div>
+
+    <div class="hero-veil" aria-hidden="true"></div>
+    <div class="hero-aura" aria-hidden="true"></div>
+    <div class="hero-grain" aria-hidden="true"></div>
+
+    <!-- Outils (discrets) -->
+    <div class="hero-tools" aria-label="Raccourcis">
+      <button class="tool" id="openNewsletterTop" type="button" aria-label="Ouvrir la newsletter">Newsletter (-10%)</button>
+      <a class="tool gold" href="#contact" aria-label="Aller au contact">Contact</a>
+    </div>
+
+    <!-- Centre -->
+    <div class="hero-center">
+      <div class="logo-hero" title="AWAN">
+        <img src="assets/Awan-logo.png" alt="AWAN">
+      </div>
+
+      <nav class="pill-row" aria-label="Navigation principale">
+        <a class="pill" href="#story">Story</a>
+        <a class="pill" href="#temps">Notre rapport au temps</a>
+        <a class="pill" href="#collection">Collection</a>
+        <a class="pill" href="#engagement">Engagement</a>
+        <a class="pill gold" href="#contact">Contact</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+
+    <!-- STORY -->
+    <section id="story" aria-label="Story AWAN">
+      <div class="container">
+        <div class="section-head">
+          <div>
+            <div class="kicker"><span class="line"></span> Story</div>
+            <h2>Un luxe calme, fait pour respirer.</h2>
+            <p class="sub">
+              AWAN naît d’une envie simple : <strong>revenir à l’instant</strong> — sans bruit, sans accumulation.
+              Des objets choisis pour leur présence, leur douceur, leur façon de transformer une pièce… et une journée.
+            </p>
+          </div>
+        </div>
+
+        <div class="grid-3">
+          <div class="card pad-lg">
+            <div class="kicker"><span class="line"></span> Présence</div>
+            <div class="mini-title">Créer une pause</div>
+            <p class="muted">
+              Un objet AWAN ne « remplit » pas l’espace : il l’allège.
+              Il invite au calme, au regard qui se pose, au geste qui ralentit.
+            </p>
+          </div>
+
+          <div class="card pad-lg">
+            <div class="kicker"><span class="line"></span> Matière</div>
+            <div class="mini-title">Texture & lumière</div>
+            <p class="muted">
+              Des formes nettes, des finitions douces, une touche d’or comme un reflet.
+              L’élégance se joue dans le détail — et dans le silence.
+            </p>
+          </div>
+
+          <div class="card pad-lg">
+            <div class="kicker"><span class="line"></span> Racines</div>
+            <div class="mini-title">Subtil, mais présent</div>
+            <p class="muted">
+              La pièce <em>cloche</em> — un plateau en bois et une cloche inspirée d’un tajine moderne —
+              glisse une trace de nos racines, sans folklore : juste une signature.
+            </p>
+          </div>
+        </div>
+
+        <div class="gallery">
+          <div class="card g-big" data-lightbox="assets/gallery-3.jpg" data-caption="Ambiance — AWAN">
+            <img src="assets/gallery-3.jpg" alt="Ambiance AWAN, calme et lumière">
+          </div>
+          <div class="g-side">
+            <div class="card g-small" data-lightbox="assets/gallery-1.jpg" data-caption="Ambiance — matière & douceur">
+              <img src="assets/gallery-1.jpg" alt="Ambiance AWAN, matière et douceur">
+            </div>
+            <div class="card g-small" data-lightbox="assets/gallery-2.jpg" data-caption="Ambiance — lignes & respiration">
+              <img src="assets/gallery-2.jpg" alt="Ambiance AWAN, lignes et respiration">
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- NOTRE RAPPORT AU TEMPS -->
+    <section id="temps" aria-label="Notre rapport au temps">
+      <div class="container">
+        <div class="section-head">
+          <div>
+            <div class="kicker"><span class="line"></span> Notre rapport au temps</div>
+            <h2>Le moment n’est pas un luxe. C’est un besoin.</h2>
+            <p class="sub">
+              Nous vivons vite. Trop vite. AWAN propose l’inverse : des objets qui <strong>réinstallent un rythme</strong>.
+              Prendre le temps de bien se sentir chez soi : une table dégagée, une lumière douce, une pièce qui rassure.
+            </p>
+          </div>
+        </div>
+
+        <div class="grid-2">
+          <div class="card pad-lg">
+            <div class="kicker"><span class="line"></span> L’instant</div>
+            <div class="mini-title">Ralentir sans culpabiliser</div>
+            <p class="muted">
+              Ce n’est pas « faire moins ». C’est <strong>faire mieux</strong> : mieux regarder, mieux choisir, mieux habiter.
+              AWAN accompagne ces micro-rituels : un thé, un silence, un geste simple qui change l’humeur.
+            </p>
+          </div>
+          <div class="card pad-lg">
+            <div class="kicker"><span class="line"></span> La maison</div>
+            <div class="mini-title">Un refuge qui respire</div>
+            <p class="muted">
+              La beauté peut être fonctionnelle, et la fonction peut être belle.
+              Chaque pièce est pensée pour être <strong>utile</strong>, <strong>durable</strong> et <strong>apaisante</strong>.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- COLLECTION -->
+    <section id="collection" aria-label="Collection AWAN">
+      <div class="container">
+        <div class="section-head">
+          <div>
+            <div class="kicker"><span class="line"></span> Collection</div>
+            <h2>Des pièces signature, pensées pour l’intérieur.</h2>
+            <p class="sub">
+              Des objets qui font du bien à l’œil — et à la journée. Cliquez pour agrandir.
+            </p>
+          </div>
+        </div>
+
+        <div class="products">
+          <article class="card p-card" data-lightbox="assets/magnetic-set.jpg" data-caption="Set magnétique — jeu de formes, calme visuel, plaisir de construire.">
+            <img class="p-img" src="assets/magnetic-set.jpg" alt="Set magnétique AWAN">
+            <div class="p-body">
+              <div class="p-top">
+                <span class="tag">Signature</span>
+                <span class="price">Édition studio</span>
+              </div>
+              <h3 class="p-name">Set magnétique</h3>
+              <p class="p-desc">
+                Jeu de lignes et d’équilibre : construire, déplacer, recommencer.
+                Une pièce qui apaise l’espace — et occupe les mains sans bruit.
+              </p>
+            </div>
+          </article>
+
+          <article class="card p-card" data-lightbox="assets/musicbox.jpg" data-caption="Boîte à musique — une présence poétique, comme un repère de sérénité.">
+            <img class="p-img" src="assets/musicbox.jpg" alt="Boîte à musique AWAN">
+            <div class="p-body">
+              <div class="p-top">
+                <span class="tag">Icône</span>
+                <span class="price">Rituel</span>
+              </div>
+              <h3 class="p-name">Boîte à musique</h3>
+              <p class="p-desc">
+                Une pièce douce, presque intime. Le genre d’objet qu’on garde, qu’on transmet,
+                qui raconte un moment plus qu’une tendance.
+              </p>
+            </div>
+          </article>
+
+          <article class="card p-card" data-lightbox="assets/vases.jpg" data-caption="Vases — lignes verticales, lumière tranquille, composition minimaliste.">
+            <img class="p-img" src="assets/vases.jpg" alt="Vases AWAN">
+            <div class="p-body">
+              <div class="p-top">
+                <span class="tag">Ambiance</span>
+                <span class="price">Intemporel</span>
+              </div>
+              <h3 class="p-name">Vases</h3>
+              <p class="p-desc">
+                Silhouettes calmes, présence discrète. Parfaits seuls ou en trio,
+                pour installer une respiration dans une pièce.
+              </p>
+            </div>
+          </article>
+
+          <article class="card p-card" data-lightbox="assets/cloches.jpg" data-caption="Plateau & cloche — une cloche inspirée d’un tajine moderne, racines subtilement intégrées.">
+            <img class="p-img" src="assets/cloches.jpg" alt="Plateau en bois et cloche inspirée d’un tajine moderne">
+            <div class="p-body">
+              <div class="p-top">
+                <span class="tag">Racines</span>
+                <span class="price">Subtil</span>
+              </div>
+              <h3 class="p-name">Plateau & cloche</h3>
+              <p class="p-desc">
+                Une touche de nos racines, réinterprétée avec sobriété :
+                un geste de partage, une forme familière, modernisée.
+              </p>
+            </div>
+          </article>
+        </div>
+
+        <div class="gallery">
+          <div class="card g-big" data-lightbox="assets/gallery-2.jpg" data-caption="Ambiance — AWAN">
+            <img src="assets/gallery-2.jpg" alt="Ambiance AWAN (gallery-2)">
+          </div>
+          <div class="g-side">
+            <div class="card g-small" data-lightbox="assets/gallery-1.jpg" data-caption="Ambiance — AWAN">
+              <img src="assets/gallery-1.jpg" alt="Ambiance AWAN (gallery-1)">
+            </div>
+            <div class="card g-small" data-lightbox="assets/gallery-3.jpg" data-caption="Ambiance — AWAN">
+              <img src="assets/gallery-3.jpg" alt="Ambiance AWAN (gallery-3)">
+            </div>
+          </div>
+        </div>
+
+        <div style="margin-top:16px; display:flex; justify-content:center; gap:10px; flex-wrap:wrap;">
+          <button class="btn gold" id="openNewsletterMid" type="button">Newsletter (-10%)</button>
+          <a class="btn" href="#aide">Infos paiement & livraison</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- ENGAGEMENT -->
+    <section id="engagement" aria-label="Engagement AWAN">
+      <div class="container">
+        <div class="section-head">
+          <div>
+            <div class="kicker"><span class="line"></span> Engagement</div>
+            <h2>Moins, mais mieux. Toujours.</h2>
+            <p class="sub">
+              AWAN privilégie une approche raisonnée : des collections cohérentes, des objets qui durent,
+              et une transparence simple — sans promesses marketing floues.
+            </p>
+          </div>
+        </div>
+
+        <div class="grid-3">
+          <div class="card pad-lg">
+            <div class="kicker"><span class="line"></span> Qualité</div>
+            <div class="mini-title">Des pièces qui restent</div>
+            <p class="muted">
+              Formes nettes, finitions soignées, présence stable.
+              L’objectif : un objet qu’on ne remplace pas — on l’adopte.
+            </p>
+          </div>
+          <div class="card pad-lg">
+            <div class="kicker"><span class="line"></span> Production</div>
+            <div class="mini-title">Raisonnée & cohérente</div>
+            <p class="muted">
+              Petites séries, choix éditorial assumé, pas de surproduction.
+              AWAN avance comme une maison : doucement, solidement.
+            </p>
+          </div>
+          <div class="card pad-lg">
+            <div class="kicker"><span class="line"></span> Transparence</div>
+            <div class="mini-title">Clarté, sans bruit</div>
+            <p class="muted">
+              Ce que l’on sait, on le dit. Ce que l’on ne sait pas, on ne l’invente pas.
+              Une relation simple, respectueuse, professionnelle.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- AIDE -->
+    <section id="aide" aria-label="Aide AWAN">
+      <div class="container">
+        <div class="section-head">
+          <div>
+            <div class="kicker"><span class="line"></span> Aide</div>
+            <h2>Infos pratiques : paiement, livraison, retours.</h2>
+            <p class="sub">
+              AWAN est un site vitrine. Les paiements et la boutique peuvent être activés via une solution e-commerce
+              (ex. Stripe/Shopify) lorsque tu le souhaites.
+            </p>
+          </div>
+        </div>
+
+        <div class="grid-2">
+          <div class="card pad-lg">
+            <div class="kicker"><span class="line"></span> Paiement</div>
+            <div class="mini-title">Moyens acceptés (via Stripe/Shopify)</div>
+            <p class="muted">
+              CB, Visa, Mastercard, Apple Pay, Google Pay.
+              Une fois la boutique activée, le parcours sera sécurisé (HTTPS + prestataire certifié).
+            </p>
+            <div style="margin-top:12px; display:flex; gap:10px; flex-wrap:wrap;">
+              <span class="tag">CB</span>
+              <span class="tag">Visa</span>
+              <span class="tag">Mastercard</span>
+              <span class="tag">Apple Pay</span>
+              <span class="tag">Google Pay</span>
+            </div>
+          </div>
+
+          <div class="card pad-lg">
+            <div class="kicker"><span class="line"></span> Livraison & retours</div>
+            <div class="mini-title">France & international</div>
+            <p class="muted">
+              Expédition avec suivi. Délais et tarifs affichés au moment de l’achat (quand la boutique sera activée).
+              Retours : <strong>14 jours</strong> (si applicable selon la configuration de vente et la nature des produits).
+            </p>
+          </div>
+        </div>
+
+        <div style="margin-top:14px; display:grid; gap:12px;">
+          <details>
+            <summary>Quand la boutique sera-t-elle active ? <span class="chev">▾</span></summary>
+            <div class="faq-body">
+              Dès que tu connectes AWAN à une solution e-commerce (ex. Stripe/Shopify), tu peux activer un catalogue,
+              des paniers et un paiement sécurisé. Le site est déjà prêt côté design pour accueillir cette étape.
+            </div>
+          </details>
+
+          <details>
+            <summary>Comment fonctionne la newsletter (-10%) ? <span class="chev">▾</span></summary>
+            <div class="faq-body">
+              La newsletter sert à prévenir des nouveautés, des lancements et des précommandes.
+              Tu peux connecter un outil (Mailchimp, Brevo, Klaviyo…) ensuite. Ici, le formulaire est une démo “prête à brancher”.
+            </div>
+          </details>
+
+          <details>
+            <summary>AWAN : est-ce une marque “minimaliste” ? <span class="chev">▾</span></summary>
+            <div class="faq-body">
+              Minimaliste dans l’intention : moins d’objets, mais plus de sens.
+              Chaque pièce doit apporter une sensation claire : calme, présence, douceur.
+            </div>
+          </details>
+        </div>
+      </div>
+    </section>
+
+    <!-- CONTACT -->
+    <section id="contact" aria-label="Contact AWAN">
+      <div class="container">
+        <div class="section-head">
+          <div>
+            <div class="kicker"><span class="line"></span> Contact</div>
+            <h2>Écrivons le prochain moment.</h2>
+            <p class="sub">
+              Une question, une collaboration, une demande presse ou boutique ?
+              Laisse un message — réponse sous 24–72h ouvrées.
+            </p>
+          </div>
+        </div>
+
+        <div class="grid-2">
+          <div class="card pad-lg">
+            <form id="contactForm" aria-label="Formulaire de contact">
+              <div class="field">
+                <label for="name">Nom</label>
+                <input id="name" name="name" type="text" autocomplete="name" placeholder="Votre nom" required>
+              </div>
+              <div class="field">
+                <label for="email">Email</label>
+                <input id="email" name="email" type="email" autocomplete="email" placeholder="vous@email.com" required>
+              </div>
+              <div class="field">
+                <label for="message">Message</label>
+                <textarea id="message" name="message" placeholder="Dites-nous ce que vous avez en tête…" required></textarea>
+              </div>
+
+              <button class="btn gold" type="submit">Envoyer</button>
+              <p class="fineprint" style="margin:0;">
+                En envoyant, vous acceptez que vos données soient utilisées pour vous répondre. Voir
+                <a href="#legal">Politique de confidentialité</a>.
+              </p>
+            </form>
+          </div>
+
+          <div class="card pad-lg">
+            <div class="kicker"><span class="line"></span> Réseaux</div>
+            <div class="mini-title">Suivre AWAN</div>
+            <p class="muted">
+              Remplace les liens ci-dessous par tes URLs officielles (Instagram, TikTok, Pinterest…).
+              Le style est prêt, il ne manque que tes handles.
+            </p>
+
+            <div class="socials" aria-label="Réseaux sociaux">
+              <a href="#" aria-label="Instagram (à compléter)">Instagram</a>
+              <a href="#" aria-label="TikTok (à compléter)">TikTok</a>
+              <a href="#" aria-label="Pinterest (à compléter)">Pinterest</a>
+              <a href="#" aria-label="Email (à compléter)">Email</a>
+            </div>
+
+            <div style="margin-top:14px;">
+              <button class="btn" id="openNewsletterBottom" type="button">Newsletter (-10%)</button>
+            </div>
+
+            <p class="fineprint">
+              Astuce : tu peux relier le formulaire à un email via un service (Formspree, Netlify Forms, etc.).
+              Sur GitHub Pages, un envoi “pur HTML” n’envoie pas d’email tout seul.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- LEGAL -->
+    <section id="legal" aria-label="Informations légales">
+      <div class="container">
+        <div class="section-head">
+          <div>
+            <div class="kicker"><span class="line"></span> Informations légales</div>
+            <h2>Mentions, confidentialité, cookies.</h2>
+            <p class="sub">
+              Les champs “à compléter” sont volontairement concentrés ici, pour que le site reste propre partout ailleurs.
+            </p>
+          </div>
+        </div>
+
+        <div class="grid-3">
+          <div class="card pad-lg">
+            <div class="kicker"><span class="line"></span> Mentions légales</div>
+            <p class="muted">
+              <strong>Éditeur :</strong> À compléter<br>
+              <strong>Adresse :</strong> À compléter<br>
+              <strong>Email :</strong> À compléter<br>
+              <strong>SIRET / RCS :</strong> À compléter<br>
+              <strong>Hébergeur :</strong> GitHub Pages
+            </p>
+          </div>
+
+          <div class="card pad-lg">
+            <div class="kicker"><span class="line"></span> Confidentialité (RGPD)</div>
+            <p class="muted">
+              Les données collectées via le formulaire (nom, email, message) servent uniquement à répondre.
+              La newsletter (si activée) collectera l’email pour l’envoi d’actualités AWAN.
+              <strong>Aucune revente</strong>, désinscription possible à tout moment.
+            </p>
+          </div>
+
+          <div class="card pad-lg">
+            <div class="kicker"><span class="line"></span> Cookies</div>
+            <p class="muted">
+              Cookies essentiels : mémorisation du choix (accept/refus).<br>
+              Cookies optionnels : analytics (à activer uniquement si vous le souhaitez).<br>
+              Vous pouvez changer d’avis en supprimant le stockage du navigateur.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- FOOTER -->
+  <footer aria-label="Pied de page">
+    <div class="container">
+      <div class="foot-top">
+        <div class="foot-links" aria-label="Liens rapides">
+          <a href="#story">Story</a>
+          <a href="#temps">Temps</a>
+          <a href="#collection">Collection</a>
+          <a href="#engagement">Engagement</a>
+          <a href="#contact">Contact</a>
+          <a href="#legal">Mentions</a>
+        </div>
+
+        <div class="socials" aria-label="Réseaux (footer)">
+          <a href="#" aria-label="Instagram (à compléter)">Instagram</a>
+          <a href="#" aria-label="TikTok (à compléter)">TikTok</a>
+          <a href="#" aria-label="Pinterest (à compléter)">Pinterest</a>
+        </div>
+      </div>
+
+      <div class="foot-brand" aria-label="Signature AWAN">
+        <img src="assets/Awan-logo.png" alt="AWAN (logo)">
+        <span class="foot-note">Objets pour l’instant — <span class="gold">l’utile devient calme</span>.</span>
+      </div>
+
+      <p class="foot-note" style="margin-top:10px;">
+        © <span id="year"></span> AWAN. Tous droits réservés.
+      </p>
+    </div>
+  </footer>
+
+  <!-- NEWSLETTER MODAL -->
+  <div class="modal" id="newsletterModal" role="dialog" aria-modal="true" aria-label="Newsletter AWAN">
+    <div class="modal-card">
+      <div class="modal-head">
+        <div>
+          <h3 class="modal-title">Newsletter AWAN (-10%)</h3>
+          <p class="muted" style="margin:6px 0 0; font-size:14px;">
+            Recevez les lancements, précommandes et moments AWAN. Sobres, rares, utiles.
+          </p>
+        </div>
+        <button class="modal-close" type="button" data-close="newsletter">Fermer</button>
+      </div>
+
+      <div class="modal-body">
+        <img src="assets/gallery-1.jpg" alt="Ambiance AWAN pour la newsletter">
+        <div>
+          <div class="field">
+            <label for="nlEmail">Email</label>
+            <input id="nlEmail" type="email" placeholder="vous@email.com" autocomplete="email">
+          </div>
+          <button class="btn gold" id="nlSubmit" type="button" style="margin-top:10px;">S’inscrire</button>
+
+          <p class="fineprint">
+            En vous inscrivant, vous acceptez de recevoir des emails AWAN.
+            <strong>Aucune revente de données</strong>. Désinscription possible à tout moment.
+            Voir <a href="#legal" data-close-link="newsletter">Confidentialité</a>.
+          </p>
+
+          <p class="fineprint" id="nlStatus" style="margin-top:10px;"></p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- LIGHTBOX MODAL -->
+  <div class="modal lightbox" id="lightbox" role="dialog" aria-modal="true" aria-label="Agrandissement image">
+    <div class="modal-card">
+      <div class="lightbox-inner">
+        <img id="lbImg" src="" alt="">
+        <div class="lb-bar">
+          <span id="lbCaption">Aperçu</span>
+          <button class="modal-close" type="button" data-close="lightbox">Fermer</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- COOKIE BANNER -->
+  <div class="cookie" id="cookieBanner" aria-label="Bandeau cookies">
+    <div class="cookie-card">
+      <p>
+        Cookies : nous utilisons un stockage local pour mémoriser votre choix (accept/refus).
+        Aucun tracking publicitaire par défaut. <a href="#legal" class="gold">En savoir plus</a>.
+      </p>
+      <div class="cookie-actions">
+        <button class="btn" id="cookieRefuse" type="button">Refuser</button>
+        <button class="btn gold" id="cookieAccept" type="button">Accepter</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    /* =========================
+       UTIL: année footer
+    ========================== */
+    document.getElementById('year').textContent = new Date().getFullYear();
+
+    /* =========================
+       HERO SLIDESHOW (Ken Burns subtil)
+    ========================== */
+    const heroSlides = Array.from(document.querySelectorAll('.hero-slide'));
+    let heroIndex = 0;
+
+    setInterval(() => {
+      heroSlides[heroIndex].classList.remove('is-active');
+      heroIndex = (heroIndex + 1) % heroSlides.length;
+      heroSlides[heroIndex].classList.add('is-active');
+    }, 5600);
+
+    /* =========================
+       NEWSLETTER MODAL
+    ========================== */
+    const newsletterModal = document.getElementById('newsletterModal');
+    const nlStatus = document.getElementById('nlStatus');
+    const nlEmail = document.getElementById('nlEmail');
+
+    function openNewsletter() {
+      newsletterModal.classList.add('is-open');
+      nlStatus.textContent = "";
+      setTimeout(() => nlEmail && nlEmail.focus(), 80);
+      // "déjà vu" (pro, mais discret)
+      try { localStorage.setItem('awan_newsletter_seen', '1'); } catch(e){}
+    }
+    function closeNewsletter() {
+      newsletterModal.classList.remove('is-open');
+    }
+
+    document.getElementById('openNewsletterTop')?.addEventListener('click', openNewsletter);
+    document.getElementById('openNewsletterMid')?.addEventListener('click', openNewsletter);
+    document.getElementById('openNewsletterBottom')?.addEventListener('click', openNewsletter);
+
+    document.querySelectorAll('[data-close="newsletter"]').forEach(btn => {
+      btn.addEventListener('click', closeNewsletter);
+    });
+
+    // Fermer en cliquant sur le fond
+    newsletterModal.addEventListener('click', (e) => {
+      if (e.target === newsletterModal) closeNewsletter();
+    });
+
+    // Lien vers #legal depuis la modal (ferme en même temps)
+    document.querySelectorAll('[data-close-link="newsletter"]').forEach(a => {
+      a.addEventListener('click', closeNewsletter);
+    });
+
+    // Démo d’inscription
+    document.getElementById('nlSubmit')?.addEventListener('click', () => {
+      const v = (nlEmail.value || "").trim();
+      if (!v || !v.includes('@')) {
+        nlStatus.textContent = "Merci d’entrer un email valide.";
+        nlStatus.style.color = "#8a2b2b";
+        return;
+      }
+      nlStatus.textContent = "Merci — votre inscription est enregistrée (démo).";
+      nlStatus.style.color = "#2b2b2b";
+      nlEmail.value = "";
+    });
+
+    /* =========================
+       LIGHTBOX
+    ========================== */
+    const lightbox = document.getElementById('lightbox');
+    const lbImg = document.getElementById('lbImg');
+    const lbCaption = document.getElementById('lbCaption');
+
+    function openLightbox(src, caption, alt) {
+      lbImg.src = src;
+      lbImg.alt = alt || caption || "Aperçu AWAN";
+      lbCaption.textContent = caption || "Aperçu";
+      lightbox.classList.add('is-open');
+    }
+    function closeLightbox() {
+      lightbox.classList.remove('is-open');
+      lbImg.src = "";
+    }
+
+    document.querySelectorAll('[data-lightbox]').forEach(el => {
+      el.addEventListener('click', () => {
+        const src = el.getAttribute('data-lightbox');
+        const cap = el.getAttribute('data-caption') || "Aperçu";
+        const img = el.querySelector('img');
+        const alt = img ? img.alt : cap;
+        openLightbox(src, cap, alt);
+      });
+      el.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') el.click();
+      });
+      el.tabIndex = 0;
+      el.setAttribute('role','button');
+      el.setAttribute('aria-label','Agrandir l’image');
+    });
+
+    document.querySelectorAll('[data-close="lightbox"]').forEach(btn => {
+      btn.addEventListener('click', closeLightbox);
+    });
+    lightbox.addEventListener('click', (e) => {
+      if (e.target === lightbox) closeLightbox();
+    });
+
+    // ESC pour fermer les modals
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        if (lightbox.classList.contains('is-open')) closeLightbox();
+        if (newsletterModal.classList.contains('is-open')) closeNewsletter();
+      }
+    });
+
+    /* =========================
+       COOKIES (localStorage)
+    ========================== */
+    const cookieBanner = document.getElementById('cookieBanner');
+    const cookieKey = 'awan_cookie_choice';
+
+    function showCookieBannerIfNeeded(){
+      try{
+        const v = localStorage.getItem(cookieKey);
+        if (!v) cookieBanner.classList.add('is-open');
+      }catch(e){
+        cookieBanner.classList.add('is-open');
+      }
+    }
+    function setCookieChoice(choice){
+      try{ localStorage.setItem(cookieKey, choice); }catch(e){}
+      cookieBanner.classList.remove('is-open');
+    }
+
+    document.getElementById('cookieAccept')?.addEventListener('click', () => setCookieChoice('accepted'));
+    document.getElementById('cookieRefuse')?.addEventListener('click', () => setCookieChoice('refused'));
+
+    showCookieBannerIfNeeded();
+
+    /* =========================
+       CONTACT FORM (démo)
+    ========================== */
+    document.getElementById('contactForm')?.addEventListener('submit', (e) => {
+      e.preventDefault();
+      alert("Message envoyé (démo). Pour recevoir les messages, reliez le formulaire à un service d’envoi.");
+      e.target.reset();
+    });
+  </script>
+
+</body>
+</html>
