@@ -1,0 +1,209 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>AWAN</title>
+  <meta name="description" content="AWAN — Objets pour l’instant." />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+  <style>
+    :root{
+      --bg:#ffffff;
+      --ink:#0f0f10;
+      --muted:#5e5e61;
+      --gold:#b8943e;
+      --gold2:#e7d59a;
+    }
+
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;
+      background:var(--bg);
+      color:var(--ink);
+      font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      overflow-x:hidden;
+    }
+    a{color:inherit;text-decoration:none}
+
+    /* HERO pleine page */
+    .hero{
+      position:relative;
+      min-height:100svh;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      padding: 24px;
+      overflow:hidden;
+      isolation:isolate;
+    }
+
+    /* fond (diapo) */
+    .hero-stage{position:absolute; inset:0; z-index:0;}
+    .hero-slide{
+      position:absolute; inset:0;
+      background-size:cover;
+      background-position:center;
+      opacity:0;
+      transform: scale(1.06);
+      transition: opacity 1.2s ease, transform 7s ease;
+      filter: saturate(.98) contrast(.98);
+    }
+    .hero-slide.is-active{opacity:1; transform: scale(1.02);}
+
+    /* voile blanc doux + grain */
+    .hero-veil{
+      position:absolute; inset:0; z-index:1;
+      background:
+        radial-gradient(closest-side at 50% 45%, rgba(255,255,255,.92), rgba(255,255,255,.62) 55%, rgba(255,255,255,.38) 80%),
+        linear-gradient(90deg, rgba(255,255,255,.70), rgba(255,255,255,.30) 55%, rgba(255,255,255,.62));
+    }
+    .hero-grain{
+      position:absolute; inset:-40px; z-index:2;
+      opacity:.07; pointer-events:none;
+      background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='180' height='180' filter='url(%23n)' opacity='.45'/%3E%3C/svg%3E");
+      mix-blend-mode:multiply;
+    }
+
+    /* CONTENU centré */
+    .hero-center{
+      position:relative;
+      z-index:3;
+      width:min(980px, 100%);
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      justify-content:center;
+      text-align:center;
+      gap: 18px;
+      padding: 34px 18px;
+    }
+
+    /* LOGO GRAND — SANS CADRE */
+    .logo-hero{
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      transform: translateY(10px);
+      opacity:0;
+      animation: logoEnter 1.0s cubic-bezier(.18,.8,.18,1) .10s forwards;
+    }
+    @keyframes logoEnter{
+      0%   {opacity:0; transform: translateY(10px) scale(.985);}
+      60%  {opacity:1; transform: translateY(0) scale(1.01);}
+      100% {opacity:1; transform: translateY(0) scale(1);}
+    }
+    .logo-hero img{
+      width: min(860px, 92vw);
+      height:auto;
+      filter: drop-shadow(0 14px 28px rgba(0,0,0,.18));
+    }
+
+    /* NAV sous le logo */
+    .nav{
+      display:flex;
+      flex-wrap:wrap;
+      gap: 18px;
+      justify-content:center;
+      align-items:center;
+      margin-top: 6px;
+    }
+    .nav a{
+      font-size:12px;
+      letter-spacing:.16em;
+      text-transform:uppercase;
+      color:#222;
+      padding:10px 14px;
+      border-radius:999px;
+      background: rgba(255,255,255,.55);
+      border: 1px solid rgba(15,15,16,.10);
+      backdrop-filter: blur(10px);
+      transition: transform .15s ease, background .15s ease;
+    }
+    .nav a:hover{transform: translateY(-1px); background: rgba(184,148,62,.10);}
+
+    /* (optionnel) petit CTA à droite style “Contact” */
+    .nav a.cta{
+      background: linear-gradient(135deg, rgba(184,148,62,.95), rgba(231,213,154,.92));
+      border-color: transparent;
+    }
+
+    /* sections simples pour que les liens # fonctionnent */
+    section{padding: 72px 18px; max-width: 980px; margin: 0 auto;}
+    h2{margin:0 0 10px; font-size:22px; letter-spacing:.02em;}
+    p{margin:0; color:var(--muted); line-height:1.65;}
+
+    @media (max-width: 520px){
+      .nav{gap:10px}
+      .nav a{padding:10px 12px}
+    }
+
+    @media (prefers-reduced-motion: reduce){
+      .hero-slide{transition:none}
+      .logo-hero{animation:none; opacity:1; transform:none;}
+    }
+  </style>
+</head>
+
+<body>
+
+  <main class="hero" id="top">
+    <div class="hero-stage" aria-hidden="true">
+      <div class="hero-slide is-active" style="background-image:url('assets/magnetic-set.jpg')"></div>
+      <div class="hero-slide" style="background-image:url('assets/vases.jpg')"></div>
+      <div class="hero-slide" style="background-image:url('assets/gallery-2.jpg')"></div>
+    </div>
+    <div class="hero-veil" aria-hidden="true"></div>
+    <div class="hero-grain" aria-hidden="true"></div>
+
+    <div class="hero-center">
+      <div class="logo-hero" title="AWAN">
+        <img src="assets/Awan-logo.png" alt="AWAN">
+      </div>
+
+      <nav class="nav" aria-label="Navigation">
+        <a href="#story">Story</a>
+        <a href="#collection">Collection</a>
+        <a href="#aide">Aide</a>
+        <a class="cta" href="#contact">Contact</a>
+      </nav>
+    </div>
+  </main>
+
+  <section id="story">
+    <h2>Story</h2>
+    <p>Contenu à compléter.</p>
+  </section>
+
+  <section id="collection">
+    <h2>Collection</h2>
+    <p>Contenu à compléter.</p>
+  </section>
+
+  <section id="aide">
+    <h2>Aide</h2>
+    <p>Contenu à compléter.</p>
+  </section>
+
+  <section id="contact">
+    <h2>Contact</h2>
+    <p>Contenu à compléter.</p>
+  </section>
+
+  <script>
+    // Diaporama hero (3 images)
+    const slides = Array.from(document.querySelectorAll('.hero-slide'));
+    let i = 0;
+    setInterval(() => {
+      slides[i].classList.remove('is-active');
+      i = (i + 1) % slides.length;
+      slides[i].classList.add('is-active');
+    }, 5200);
+  </script>
+
+</body>
+</html>
