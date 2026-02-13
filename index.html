@@ -1,0 +1,703 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>AWAN — Objets pour l’instant</title>
+  <meta name="description" content="AWAN — des objets pensés pour se recentrer sur l’instant, au sein de la maison." />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+  <style>
+    :root{
+      --bg:#ffffff;
+      --ink:#0f0f10;
+      --muted:#5e5e61;
+
+      --gold:#b8943e;
+      --gold2:#e7d59a;
+
+      --radius: 18px;
+      --shadow: 0 18px 55px rgba(0,0,0,.08);
+      --shadow2: 0 10px 40px rgba(184,148,62,.15);
+
+      --serif: "Playfair Display", serif;
+      --sans: "Inter", system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+
+      --heroShift: 0px;
+      --tiltX: 0deg;
+      --tiltY: 0deg;
+    }
+
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;
+      background:var(--bg);
+      color:var(--ink);
+      font-family:var(--sans);
+      line-height:1.6;
+      letter-spacing:.2px;
+      overflow-x:hidden;
+    }
+    a{color:inherit;text-decoration:none}
+    img{max-width:100%; display:block}
+    .container{width:min(1120px, calc(100% - 44px)); margin:0 auto;}
+
+    /* Desktop cursor glow */
+    .cursor-glow{
+      position:fixed; inset:0; pointer-events:none; z-index:2;
+      opacity:0;
+      transition: opacity .35s ease;
+      background:
+        radial-gradient(280px 280px at var(--mx, 50%) var(--my, 30%), rgba(184,148,62,.14), transparent 70%),
+        radial-gradient(720px 620px at calc(var(--mx, 50%) + 120px) calc(var(--my, 30%) + 60px), rgba(231,213,154,.10), transparent 72%);
+      mix-blend-mode:multiply;
+    }
+
+    /* Header */
+    .topbar{
+      position:fixed; top:0; left:0; right:0;
+      z-index:120;
+      background: rgba(255,255,255,.88);
+      backdrop-filter: blur(14px);
+      border-bottom:1px solid rgba(15,15,16,.08);
+    }
+    .topbar-inner{
+      display:flex; align-items:center; justify-content:space-between;
+      padding: 12px 0;
+      gap:16px;
+    }
+    .brand{display:flex; align-items:center; gap:12px;}
+    .logo-nav img{height:32px; width:auto; filter: drop-shadow(0 10px 24px rgba(184,148,62,.18));}
+    .micro{
+      font-size:11px;
+      letter-spacing:.28em;
+      text-transform:uppercase;
+      color:#2f2f31;
+      white-space:nowrap;
+    }
+
+    nav{display:flex; gap:18px; align-items:center; justify-content:center; flex:1;}
+    nav a{
+      font-size:12px;
+      letter-spacing:.16em;
+      text-transform:uppercase;
+      color:#222;
+      padding:10px 10px;
+      border-radius:999px;
+      transition: background .2s ease, transform .2s ease;
+    }
+    nav a:hover{background: rgba(184,148,62,.10); transform: translateY(-1px);}
+
+    .cta{display:flex; gap:10px; justify-content:flex-end;}
+    .btn{
+      display:inline-flex; align-items:center; justify-content:center;
+      padding:10px 14px;
+      border-radius:999px;
+      border:1px solid rgba(184,148,62,.35);
+      background:#fff;
+      font-size:12px;
+      letter-spacing:.12em;
+      text-transform:uppercase;
+      transition: transform .15s ease, box-shadow .15s ease;
+      cursor:pointer;
+      user-select:none;
+    }
+    .btn:hover{transform:translateY(-1px); box-shadow: var(--shadow2);}
+    .btn.primary{
+      background: linear-gradient(135deg, rgba(184,148,62,.95), rgba(231,213,154,.92));
+      border-color:transparent;
+    }
+
+    /* HERO */
+    .hero{
+      position:relative;
+      min-height: 100svh;
+      padding-top: 76px;
+      display:flex; align-items:center;
+      overflow:hidden;
+      isolation:isolate;
+    }
+    .hero-stage{
+      position:absolute; inset:0;
+      z-index:0;
+      transform: translateY(var(--heroShift));
+      will-change: transform;
+    }
+    .hero-slide{
+      position:absolute; inset:0;
+      background-size:cover;
+      background-position:center;
+      opacity:0;
+      transform: scale(1.07);
+      transition: opacity 1.2s ease, transform 7s ease;
+      filter: saturate(.98) contrast(.98);
+    }
+    .hero-slide.is-active{
+      opacity:1;
+      transform: scale(1.03);
+    }
+    .hero-veil{
+      position:absolute; inset:0;
+      z-index:1;
+      background:
+        radial-gradient(closest-side at 24% 35%, rgba(255,255,255,.90), rgba(255,255,255,.62) 48%, rgba(255,255,255,.42) 78%),
+        linear-gradient(90deg, rgba(255,255,255,.70), rgba(255,255,255,.34) 56%, rgba(255,255,255,.60));
+    }
+    .hero-aura{
+      position:absolute; inset:-60px;
+      z-index:2;
+      pointer-events:none;
+      opacity:.55;
+      background:
+        radial-gradient(560px 420px at 18% 42%, rgba(184,148,62,.22), transparent 70%),
+        radial-gradient(620px 520px at 78% 62%, rgba(231,213,154,.18), transparent 72%);
+      filter: blur(18px);
+      mix-blend-mode:multiply;
+    }
+    .hero-grain{
+      position:absolute; inset:-40px;
+      z-index:3;
+      opacity:.07;
+      pointer-events:none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='180' height='180' filter='url(%23n)' opacity='.45'/%3E%3C/svg%3E");
+      mix-blend-mode:multiply;
+    }
+
+    .hero-content{
+      position:relative;
+      z-index:4;
+      display:grid;
+      grid-template-columns: 1.05fr .95fr;
+      gap: 18px;
+      align-items:stretch;
+      padding: 26px 0 40px;
+    }
+
+    .card{
+      background: rgba(255,255,255,.86);
+      border:1px solid rgba(15,15,16,.10);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+    }
+
+    .hero-left{
+      padding: 34px;
+      position:relative;
+      overflow:hidden;
+      transform: perspective(900px) rotateX(var(--tiltX)) rotateY(var(--tiltY));
+      transform-origin: center;
+      transition: transform .18s ease;
+    }
+
+    /* BIG HERO LOGO */
+    .brand-hero{
+      display:flex; flex-direction:column; align-items:flex-start;
+      gap:10px; margin-bottom: 14px;
+    }
+    .logo-hero{
+      position:relative;
+      display:inline-block;
+      padding: 18px 18px;
+      border-radius: 999px;
+      background: rgba(255,255,255,.78);
+      border: 1px solid rgba(184,148,62,.32);
+      box-shadow: 0 18px 60px rgba(184,148,62,.14);
+      overflow:hidden;
+      transform: translateY(10px) scale(.985);
+      opacity: 0;
+      animation: logoEnter 1.1s cubic-bezier(.18,.8,.18,1) .25s forwards;
+    }
+    @keyframes logoEnter{
+      0%   {opacity:0; transform: translateY(10px) scale(.985);}
+      55%  {opacity:1; transform: translateY(0) scale(1.01);}
+      100% {opacity:1; transform: translateY(0) scale(1);}
+    }
+    .logo-hero::before{
+      content:"";
+      position:absolute; inset:-90px -120px;
+      background:
+        radial-gradient(closest-side at 35% 55%, rgba(184,148,62,.30), transparent 72%),
+        radial-gradient(closest-side at 72% 28%, rgba(231,213,154,.26), transparent 70%);
+      filter: blur(16px);
+      opacity:.9;
+      pointer-events:none;
+      animation: haloBreath 5.5s ease-in-out 1.2s infinite;
+    }
+    @keyframes haloBreath{
+      0%,100%{opacity:.85; transform: scale(1);}
+      50%{opacity:1; transform: scale(1.04);}
+    }
+    .logo-hero::after{
+      content:"";
+      position:absolute; inset:0;
+      background: linear-gradient(110deg, transparent 0%, rgba(255,255,255,.38) 35%, transparent 70%);
+      transform: translateX(-70%);
+      opacity:.55;
+      pointer-events:none;
+    }
+    .logo-hero:hover::after{ animation: sheen 1.4s ease forwards; }
+    @keyframes sheen{ 0%{transform: translateX(-70%);} 100%{transform: translateX(140%);} }
+
+    .logo-hero img{
+      height: 82px;
+      width:auto;
+      filter: drop-shadow(0 18px 45px rgba(184,148,62,.18));
+    }
+    .sigline{
+      font-size: 11px;
+      letter-spacing:.34em;
+      text-transform:uppercase;
+      color:#303033;
+      padding-left: 6px;
+    }
+
+    /* Title typewriter */
+    h1{
+      font-family: var(--serif);
+      font-weight: 600;
+      font-size: clamp(30px, 3.2vw, 46px);
+      line-height:1.08;
+      margin: 10px 0 12px;
+      letter-spacing:.02em;
+    }
+    .reveal-title{display:inline-block; position:relative;}
+    .reveal-title .cursor{
+      display:inline-block;
+      width: 10px;
+      height: 1.05em;
+      vertical-align: -0.15em;
+      margin-left: 4px;
+      background: linear-gradient(180deg, var(--gold), var(--gold2));
+      opacity:.85;
+      border-radius:2px;
+      animation: blink 1s steps(1) infinite;
+    }
+    @keyframes blink{ 50%{opacity:0;} }
+
+    .lead{
+      margin:0 0 18px;
+      color: var(--muted);
+      font-size:15px;
+      max-width: 62ch;
+    }
+    .hero-actions{display:flex; flex-wrap:wrap; gap:10px; margin-top: 10px;}
+
+    /* Right panel */
+    .hero-right{display:flex; flex-direction:column; overflow:hidden;}
+    .panel-top{
+      padding: 14px 16px;
+      border-bottom: 1px solid rgba(15,15,16,.10);
+      display:flex; align-items:center; justify-content:space-between; gap:12px;
+      background: rgba(255,255,255,.80);
+    }
+    .panel-top .label{
+      font-size:12px; letter-spacing:.28em; text-transform:uppercase; color:#2b2b2b;
+    }
+    .panel-top .pill{
+      font-size:12px;
+      padding: 6px 10px;
+      border-radius:999px;
+      border:1px solid rgba(184,148,62,.30);
+      background: rgba(184,148,62,.08);
+      white-space:nowrap;
+    }
+    .panel-body{
+      padding: 14px;
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      background: rgba(255,255,255,.70);
+    }
+    .shot{
+      border-radius: 14px;
+      overflow:hidden;
+      border: 1px solid rgba(0,0,0,.06);
+      background:#fff;
+      aspect-ratio: 4/3;
+      cursor: zoom-in;
+      transition: transform .25s ease, box-shadow .25s ease;
+    }
+    .shot:hover{transform: translateY(-2px); box-shadow: 0 14px 34px rgba(0,0,0,.10);}
+    .shot img{width:100%; height:100%; object-fit:cover;}
+
+    section{padding: 54px 0;}
+    .section-head{display:flex; align-items:flex-end; justify-content:space-between; gap:18px; margin-bottom:18px;}
+    .section-title{font-family:var(--serif); font-weight:600; font-size:26px; margin:0; letter-spacing:.02em;}
+    .section-sub{margin:0; color:var(--muted); font-size:14px; max-width:74ch;}
+
+    .grid-3{display:grid; grid-template-columns: repeat(3, 1fr); gap:14px;}
+    .card-pad{padding: 18px;}
+    .mini-kicker{
+      font-size:11px; letter-spacing:.28em; text-transform:uppercase; color:#333;
+      display:flex; gap:10px; align-items:center;
+    }
+    .mini-kicker .line{height:1px; flex:1; background: linear-gradient(90deg, rgba(184,148,62,.55), rgba(15,15,16,0));}
+    .card-pad h3{font-family:var(--serif); font-weight:600; margin: 6px 0 6px; letter-spacing:.02em;}
+    .card-pad p{margin:0; color:var(--muted); font-size:14px;}
+
+    .gallery{
+      display:grid;
+      grid-template-columns: 1.2fr .8fr;
+      gap:14px;
+      align-items:stretch;
+    }
+    .gallery .big{padding:0; overflow:hidden; cursor:zoom-in;}
+    .gallery .big img{width:100%; height:100%; object-fit:cover; aspect-ratio:16/10;}
+    .gallery .side{display:grid; grid-template-rows:repeat(2,1fr); gap:14px;}
+    .thumb{padding:0; overflow:hidden; cursor:zoom-in;}
+    .thumb img{width:100%; height:100%; object-fit:cover; aspect-ratio:16/10;}
+
+    .p-card{padding:0; overflow:hidden;}
+    .p-card .p-img{height:210px; object-fit:cover;}
+    .p-card .p-body{padding:16px;}
+    .p-card h3{margin:6px 0 6px; font-family:var(--serif); font-weight:600;}
+    .p-card p{margin:0; color:var(--muted); font-size:14px;}
+
+    /* FAQ */
+    .faq-wrap{display:grid; grid-template-columns: 1fr; gap:12px;}
+    details{
+      border:1px solid rgba(15,15,16,.10);
+      border-radius: 14px;
+      background: rgba(255,255,255,.86);
+      box-shadow: 0 10px 34px rgba(0,0,0,.06);
+      overflow:hidden;
+    }
+    summary{
+      cursor:pointer;
+      list-style:none;
+      padding: 14px 16px;
+      display:flex; align-items:center; justify-content:space-between;
+      font-weight:600;
+    }
+    summary::-webkit-details-marker{display:none;}
+    .faq-body{
+      padding: 0 16px 14px;
+      color: var(--muted);
+      font-size:14px;
+    }
+    .chev{opacity:.7;}
+
+    /* Scroll reveal */
+    .reveal{opacity:0; transform: translateY(14px); transition: opacity .8s ease, transform .8s ease;}
+    .reveal.is-in{opacity:1; transform: translateY(0);}
+
+    /* Footer */
+    footer{
+      border-top:1px solid rgba(15,15,16,.10);
+      padding: 24px 0 34px;
+      color: var(--muted);
+      font-size:13px;
+      background:#fff;
+    }
+    .foot-top{display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:12px; margin-bottom: 10px;}
+    .foot-links{display:flex; flex-wrap:wrap; gap:12px; align-items:center;}
+    .foot-links a{padding:8px 10px; border-radius:999px; border:1px solid rgba(184,148,62,.22); background: rgba(184,148,62,.06);}
+    .gold{color:var(--gold);}
+    .social{display:flex; gap:10px; flex-wrap:wrap;}
+    .social a{border:1px solid rgba(15,15,16,.10); padding:8px 10px; border-radius:999px; background:#fff;}
+    .foot-note{opacity:.9}
+
+    /* Newsletter modal */
+    .modal{
+      position:fixed; inset:0;
+      display:none;
+      align-items:center; justify-content:center;
+      padding:20px;
+      z-index:250;
+      background: rgba(10,10,10,.55);
+      backdrop-filter: blur(10px);
+    }
+    .modal.is-open{display:flex;}
+    .modal-card{
+      width:min(720px, 100%);
+      border-radius: 18px;
+      overflow:hidden;
+      background: rgba(255,255,255,.94);
+      border:1px solid rgba(255,255,255,.20);
+      box-shadow: 0 30px 90px rgba(0,0,0,.35);
+    }
+    .modal-inner{padding:18px;}
+    .modal-head{display:flex; align-items:flex-start; justify-content:space-between; gap:12px; padding:18px; border-bottom:1px solid rgba(15,15,16,.10);}
+    .modal-title{margin:0; font-family:var(--serif); font-weight:600;}
+    .modal-close{border:1px solid rgba(184,148,62,.35); background:#fff; border-radius:999px; padding:8px 12px; cursor:pointer;}
+    .modal-grid{display:grid; grid-template-columns: 1fr 1fr; gap:14px; padding:18px;}
+    .modal-grid img{width:100%; height:100%; object-fit:cover; border-radius: 14px; border:1px solid rgba(0,0,0,.06); aspect-ratio: 4/3;}
+    .field{display:flex; gap:10px; flex-wrap:wrap; align-items:center;}
+    input[type="email"]{
+      flex:1;
+      min-width: 220px;
+      padding:12px 12px;
+      border-radius: 12px;
+      border:1px solid rgba(15,15,16,.12);
+      outline:none;
+      font-size:14px;
+    }
+    .fineprint{font-size:12px; color:var(--muted); margin-top:10px; line-height:1.45;}
+    .fineprint a{color: var(--gold); text-decoration: underline; text-underline-offset: 3px;}
+
+    /* Cookie banner */
+    .cookie{
+      position:fixed;
+      left:16px; right:16px; bottom:16px;
+      z-index:240;
+      display:none;
+    }
+    .cookie.is-open{display:block;}
+    .cookie-card{
+      width:min(980px, 100%);
+      margin:0 auto;
+      background: rgba(255,255,255,.94);
+      border:1px solid rgba(15,15,16,.10);
+      border-radius: 16px;
+      box-shadow: 0 18px 55px rgba(0,0,0,.18);
+      padding: 14px 14px;
+      display:flex;
+      flex-wrap:wrap;
+      gap:10px;
+      align-items:center;
+      justify-content:space-between;
+    }
+    .cookie p{margin:0; color:var(--muted); font-size:13px; max-width: 78ch;}
+    .cookie-actions{display:flex; gap:10px; flex-wrap:wrap;}
+
+    /* WhatsApp floating */
+    .wa{
+      position:fixed;
+      right:16px;
+      bottom:16px;
+      z-index:260;
+      display:flex;
+      gap:10px;
+      align-items:center;
+      padding: 10px 12px;
+      border-radius: 999px;
+      border:1px solid rgba(184,148,62,.30);
+      background: rgba(255,255,255,.92);
+      box-shadow: 0 18px 55px rgba(0,0,0,.12);
+    }
+    .wa b{font-size:12px; letter-spacing:.12em; text-transform:uppercase;}
+    .wa span{font-size:12px; color:var(--muted);}
+
+    /* Lightbox */
+    .lightbox{
+      position:fixed; inset:0;
+      background: rgba(10,10,10,.70);
+      backdrop-filter: blur(10px);
+      display:none;
+      align-items:center;
+      justify-content:center;
+      z-index:200;
+      padding: 24px;
+    }
+    .lightbox.is-open{display:flex;}
+    .lightbox-inner{
+      width:min(1080px, 100%);
+      background: rgba(255,255,255,.92);
+      border: 1px solid rgba(255,255,255,.25);
+      border-radius: 18px;
+      overflow:hidden;
+      box-shadow: 0 30px 90px rgba(0,0,0,.35);
+      position:relative;
+    }
+    .lightbox-inner img{
+      width:100%;
+      height:auto;
+      max-height: 82vh;
+      object-fit:contain;
+      background: #fff;
+    }
+    .lb-bar{
+      display:flex; align-items:center; justify-content:space-between; gap:12px;
+      padding: 12px 14px;
+      border-top: 1px solid rgba(15,15,16,.10);
+      background: rgba(255,255,255,.96);
+      font-size:12px; letter-spacing:.14em; text-transform:uppercase; color:#222;
+    }
+    .lb-close{
+      border:1px solid rgba(184,148,62,.35);
+      background:#fff;
+      border-radius:999px;
+      padding: 8px 12px;
+      cursor:pointer;
+      font-size:12px; letter-spacing:.12em; text-transform:uppercase;
+    }
+
+    @media (max-width: 900px){
+      nav{display:none;}
+      .hero-content{grid-template-columns:1fr;}
+      .panel-body{grid-template-columns:1fr;}
+      .grid-3{grid-template-columns:1fr;}
+      .gallery{grid-template-columns:1fr;}
+      .logo-hero img{height:68px;}
+      .hero-left{transform:none !important;}
+      .micro{display:none;}
+      .modal-grid{grid-template-columns:1fr;}
+      .wa{left:16px; right:16px; justify-content:space-between;}
+    }
+
+    @media (prefers-reduced-motion: reduce){
+      .hero-slide{transition:none !important;}
+      .reveal{transition:none !important;}
+      .cursor-glow{display:none;}
+      .logo-hero{animation:none !important; opacity:1; transform:none;}
+    }
+  </style>
+</head>
+
+<body>
+  <div class="cursor-glow" aria-hidden="true"></div>
+
+  <header class="topbar">
+    <div class="container topbar-inner">
+      <a class="brand" href="#top" aria-label="Accueil AWAN">
+        <span class="logo-nav"><img src="assets/Awan-logo.png" alt="Logo AWAN"></span>
+        <span class="micro">objets pour l’instant</span>
+      </a>
+
+      <nav aria-label="Navigation">
+        <a href="#story">Story</a>
+        <a href="#collection">Collection</a>
+        <a href="#aide">Aide</a>
+        <a href="#contact">Contact</a>
+      </nav>
+
+      <div class="cta">
+        <button class="btn" id="openNewsletter" type="button">-10% Newsletter</button>
+        <a class="btn primary" href="#contact">Contact</a>
+      </div>
+    </div>
+  </header>
+
+  <main id="top" class="hero">
+    <div class="hero-stage" aria-hidden="true">
+      <div class="hero-slide is-active" style="background-image:url('assets/Magnetic-set.jpg')"></div>
+      <div class="hero-slide" style="background-image:url('assets/vases.jpg')"></div>
+      <div class="hero-slide" style="background-image:url('assets/gallery-2.jpg')"></div>
+    </div>
+    <div class="hero-veil" aria-hidden="true"></div>
+    <div class="hero-aura" aria-hidden="true"></div>
+    <div class="hero-grain" aria-hidden="true"></div>
+
+    <div class="container hero-content">
+      <div class="card hero-left reveal" id="tiltCard">
+        <div class="brand-hero">
+          <div class="logo-hero" title="AWAN">
+            <img src="assets/Awan-logo.png" alt="AWAN">
+          </div>
+          <div class="sigline">présence • matière • héritage</div>
+        </div>
+
+        <h1>
+          <span class="reveal-title" id="typeTitle" data-text="Se recentrer sur le moment présent.">
+            <span id="typeOut"></span><span class="cursor" aria-hidden="true"></span>
+          </span>
+        </h1>
+
+        <p class="lead">
+          AWAN signifie <em>le moment</em>.
+          Des objets pensés pour créer une pause — contempler, respirer —
+          et ancrer l’instant au sein de la maison, avec élégance et douceur.
+        </p>
+
+        <div class="hero-actions">
+          <a class="btn primary" href="#collection">Découvrir la collection</a>
+          <button class="btn" id="openNewsletter2" type="button">S’abonner (-10%)</button>
+        </div>
+
+        <p class="fineprint" style="margin-top:14px;">
+          Paiement CB / Apple Pay : disponible uniquement via une solution e-commerce (ex. Stripe/Shopify). Voir <a href="#aide">Aide</a>.
+        </p>
+      </div>
+
+      <aside class="card hero-right reveal" aria-label="Aperçus">
+        <div class="panel-top">
+          <div class="label">Aperçus</div>
+          <div class="pill">Clique pour agrandir</div>
+        </div>
+        <div class="panel-body">
+          <div class="shot" data-lightbox="assets/Musicbox.jpg" data-caption="Boîte à musique AWAN">
+            <img src="assets/Musicbox.jpg" alt="Boîte à musique AWAN">
+          </div>
+          <div class="shot" data-lightbox="assets/vases.jpg" data-caption="Vases — univers AWAN">
+            <img src="assets/vases.jpg" alt="Vases — univers AWAN">
+          </div>
+          <div class="shot" data-lightbox="assets/Cloches.jpg" data-caption="Cloches — détail héritage">
+            <img src="assets/Cloches.jpg" alt="Cloches — détail héritage">
+          </div>
+          <div class="shot" data-lightbox="assets/gallery-1.jpg" data-caption="Ambiance AWAN">
+            <img src="assets/gallery-1.jpg" alt="Ambiance AWAN">
+          </div>
+        </div>
+      </aside>
+    </div>
+  </main>
+
+  <section id="story">
+    <div class="container">
+      <div class="section-head reveal">
+        <div>
+          <h2 class="section-title">Story</h2>
+          <p class="section-sub">
+            Un luxe calme : des formes inspirées, une matière douce, et une présence qui apaise.
+          </p>
+        </div>
+      </div>
+
+      <div class="grid-3">
+        <div class="card card-pad reveal">
+          <div class="mini-kicker">Présence <span class="line"></span></div>
+          <h3>Une pause dans le quotidien</h3>
+          <p>Des objets qui invitent à ralentir, sans surcharger l’espace.</p>
+        </div>
+        <div class="card card-pad reveal">
+          <div class="mini-kicker">Matière <span class="line"></span></div>
+          <h3>Lumière, texture, silence</h3>
+          <p>Blanc lumineux, ombre douce, détail doré : une signature élégante.</p>
+        </div>
+        <div class="card card-pad reveal">
+          <div class="mini-kicker">Héritage <span class="line"></span></div>
+          <h3>Symboles intemporels</h3>
+          <p>Des formes familières réinterprétées avec finesse et équilibre.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="collection">
+    <div class="container">
+      <div class="section-head reveal">
+        <div>
+          <h2 class="section-title">Collection</h2>
+          <p class="section-sub">
+            Des pièces signature, pensées pour l’intérieur — belles, utiles, apaisantes.
+          </p>
+        </div>
+      </div>
+
+      <div class="grid-3">
+        <div class="card p-card reveal" data-lightbox="assets/Magnetic-set.jpg" data-caption="Set magnétique — AWAN">
+          <img class="p-img" src="assets/Magnetic-set.jpg" alt="Set magnétique AWAN">
+          <div class="p-body">
+            <div class="mini-kicker">Signature <span class="line"></span></div>
+            <h3>Set magnétique</h3>
+            <p>Jeu de formes, calme visuel, plaisir de construire.</p>
+          </div>
+        </div>
+
+        <div class="card p-card reveal" data-lightbox="assets/Musicbox.jpg" data-caption="Boîte à musique — AWAN">
+          <img class="p-img" src="assets/Musicbox.jpg" alt="Boîte à musique AWAN">
+          <div class="p-body">
+            <div class="mini-kicker">Icône <span class="line"></span></div>
+            <h3>Boîte à musique</h3>
+            <p>Une pièce poétique, comme un repère de sérénité.</p>
+          </div>
+        </div>
+
+        <div class="card p-card reveal" data-lightbox="assets/vases.jpg" data-caption="Vases — AWAN">
+          <img class="p-img" src="assets/vases.jpg" alt="Vases AWAN">
+          <div class="p-body">
+            <div class="mini-kicker">Ambiance <span class
