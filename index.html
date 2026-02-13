@@ -81,10 +81,22 @@
 
     /* Overlay blanc: lisible sans "délaver" */
     .hero-veil{
-      position:absolute; inset:0; z-index:1;
-      background:
-        radial-gradient(closest-side at 50% 42%, rgba(255,255,255,.88), rgba(255,255,255,.56) 55%, rgba(255,255,255,.26) 82%),
-        linear-gradient(90deg, rgba(255,255,255,.64), rgba(255,255,255,.26) 56%, rgba(255,255,255,.58));
+  position:absolute;
+  inset:0;
+  z-index:1;
+  background:
+    radial-gradient(
+      closest-side at 50% 42%,
+      rgba(255,255,255,.65),
+      rgba(255,255,255,.30) 55%,
+      rgba(255,255,255,.12) 82%
+    ),
+    linear-gradient(
+      90deg,
+      rgba(255,255,255,.25),
+      rgba(255,255,255,.08) 56%,
+      rgba(255,255,255,.20)
+    );
     }
     .hero-aura{
       position:absolute; inset:-60px; z-index:2;
