@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>AWAN — Panier</title>
+  <meta name="description" content="Panier AWAN." />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Playfair+Display:wght@500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+
+<body>
+  <header class="topbar">
+    <div class="wrap topbar-inner">
+      <a class="brand" href="index.html"><span class="dot"></span><span>AWAN</span></a>
+      <nav class="nav">
+        <a class="pill" href="collection.html">Collection</a>
+        <a class="pill" href="legal.html">Mentions</a>
+        <a class="pill" href="cgv.html">CGV</a>
+      </nav>
+      <div class="right">
+        <a class="pill pill--gold" href="cart.html">Panier <span class="count" id="cartCount">0</span></a>
+      </div>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <section class="section">
+      <div class="section-head">
+        <div>
+          <div class="kicker"><span class="kline"></span> Panier</div>
+          <h1 class="h1">Votre sélection</h1>
+          <p class="lead">Livraison offerte dès <span class="gold">120€</span>.</p>
+        </div>
+      </div>
+
+      <div class="cart">
+        <div class="cart-lines" id="cartLines"></div>
+
+        <aside class="cart-summary">
+          <div class="card pad">
+            <div class="row"><b>Sous-total</b> <span id="subtotal">0€</span></div>
+            <div class="row"><b>Livraison</b> <span id="shipping">—</span></div>
+            <div class="row row-total"><b>Total</b> <span id="total">0€</span></div>
+
+            <div class="field" style="margin-top:14px;">
+              <label for="coupon">Code promo</label>
+              <input id="coupon" type="text" placeholder="AWAN10" />
+              <p class="fineprint" id="couponNote"></p>
+            </div>
+
+            <button class="btn btn--gold" id="checkout">Demander le lien de paiement</button>
+            <p class="fineprint">
+              Démo : le bouton prépare un email vers <b>Awan.mts@hotmail.com</b> avec votre panier.
+              La partie paiement Stripe/Shopify sera branchée ensuite.
+            </p>
+          </div>
+        </aside>
+      </div>
+    </section>
+
+    <footer class="footer">
+      <p class="fineprint">© <span id="year"></span> AWAN.</p>
+    </footer>
+  </main>
+
+  <script src="js/data.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
