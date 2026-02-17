@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>AWAN — L’instant devient présent</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@500;600&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="style.css">
+  <script src="data.js"></script>
+  <script src="app.js" defer></script>
+</head>
+<body data-page="home">
+  <header class="topbar">
+    <div class="container inner">
+      <a class="brand" href="index.html" aria-label="Accueil">
+        <img src="logo.png" alt="AWAN">
+      </a>
+      <nav class="nav" aria-label="Navigation">
+        <a href="collection.html">Collection</a>
+        <a href="cart.html">Panier <span id="cartCount" class="badge" style="display:none;margin-left:6px;"></span></a>
+        <a href="legal.html">Informations</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="hero">
+    <div class="bg" id="homeBg" aria-hidden="true"></div>
+    <div class="veil" aria-hidden="true"></div>
+
+    <section class="content">
+      <div>
+        <img class="logo-xxl" src="logo.png" alt="AWAN">
+        <div class="slogan">L’instant devient présent.</div>
+
+        <div class="cta">
+          <a class="btn primary" href="collection.html">Collection</a>
+          <a class="btn" href="legal.html">Informations</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="container">
+      <div>© <span id="y"></span> AWAN — luxe calme, minimal.</div>
+      <div class="links">
+        <a href="legal.html">Mentions légales</a>
+        <a href="cgv.html">CGV</a>
+        <a href="privacy.html">Confidentialité</a>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    document.getElementById("y").textContent = new Date().getFullYear();
+  </script>
+</body>
+</html>

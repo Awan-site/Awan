@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>AWAN — Produit</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@500;600&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="style.css">
+  <script src="data.js"></script>
+  <script src="app.js" defer></script>
+</head>
+<body data-page="product">
+  <header class="topbar">
+    <div class="container inner">
+      <a class="brand" href="index.html"><img src="logo.png" alt="AWAN"></a>
+      <nav class="nav">
+        <a href="collection.html">Collection</a>
+        <a href="cart.html">Panier <span id="cartCount" class="badge" style="display:none;margin-left:6px;"></span></a>
+        <a href="legal.html">Infos</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="page">
+    <div class="container" id="productWrap"></div>
+  </main>
+
+  <footer class="footer">
+    <div class="container">
+      <div>© <span id="y"></span> AWAN</div>
+      <div class="links">
+        <a href="legal.html">Mentions légales</a>
+        <a href="cgv.html">CGV</a>
+        <a href="privacy.html">Confidentialité</a>
+      </div>
+    </div>
+  </footer>
+
+  <script>document.getElementById("y").textContent = new Date().getFullYear();</script>
+</body>
+</html>
