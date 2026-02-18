@@ -54,9 +54,9 @@ img{ max-width:100%; display:block; }
   min-width:160px;
 }
 .brand img{
-  height:85px;
+  height:90px;
   width:auto;
-  filter: drop-shadow(0 10px 28px rgba(0,0,0,.12));
+  filter: drop-shadow(0 12px 30px rgba(0,0,0,.14));
 }
 .nav{
   display:flex;
@@ -371,7 +371,7 @@ hr.sep{
   transition: opacity 1.4s ease;
 }
 .hero .veil{
-  background: rgba(255,255,255,.20);
+  background: rgba(255,255,255,.23);
   backdrop-filter: blur(2px);
 }
 .hero .content{
