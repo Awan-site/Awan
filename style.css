@@ -371,8 +371,15 @@ hr.sep{
   transition: opacity 1.4s ease;
 }
 .hero .veil{
-  background: rgba(255,255,255,.23);
-  backdrop-filter: blur(2px);
+  position:absolute;
+  inset:0;
+
+  /* léger voile visible mais pas opaque */
+  background: rgba(255,255,255,.18);
+
+  /* blur modéré = luxe */
+  backdrop-filter: blur(3px);
+  -webkit-backdrop-filter: blur(3px);
 }
 .hero .content{
   position:relative;
