@@ -3,7 +3,7 @@ window.AWAN_PRODUCTS = [
   {
     id: "handbag-silver",
     name: "Handbag Silver",
-    price: 149,
+    price: 69,
     currency: "€",
     cover: "handbag1.jpg",
     images: ["handbag1.jpg","handbag2.jpg","handbag3.jpg"],
@@ -12,8 +12,8 @@ window.AWAN_PRODUCTS = [
   },
   {
     id: "archball",
-    name: "Archball Set",
-    price: 129,
+    name: "Archball ",
+    price: 59,
     currency: "€",
     cover: "archball1.jpg",
     images: ["archball1.jpg","archball2.jpg","archball3.jpg"],
@@ -22,8 +22,8 @@ window.AWAN_PRODUCTS = [
   },
   {
     id: "ushape",
-    name: "U-Shape Set",
-    price: 119,
+    name: "U-Shape",
+    price: 59,
     currency: "€",
     // tu as ushape.jpg + ushape1/2/3 → cover = ushape.jpg
     cover: "ushape.jpg",
@@ -33,8 +33,8 @@ window.AWAN_PRODUCTS = [
   },
   {
     id: "tube-set",
-    name: "Tube Set",
-    price: 89,
+    name: "Tube ",
+    price: 49,
     currency: "€",
     cover: "tube-set.jpg",
     images: ["tube-set.jpg"],
@@ -44,7 +44,7 @@ window.AWAN_PRODUCTS = [
   {
     id: "wave-pipe",
     name: "Wave Pipe",
-    price: 79,
+    price: 45,
     currency: "€",
     cover: "wave-pipe.jpg",
     images: ["wave-pipe.jpg"],
@@ -53,8 +53,8 @@ window.AWAN_PRODUCTS = [
   },
   {
     id: "vintage-set",
-    name: "Vintage Set",
-    price: 95,
+    name: "Vintage ",
+    price: 49,
     currency: "€",
     cover: "vintage-set.jpg",
     images: ["vintage-set.jpg"],
@@ -64,7 +64,7 @@ window.AWAN_PRODUCTS = [
   {
     id: "layered-arch",
     name: "Layered Arch",
-    price: 99,
+    price: 65,
     currency: "€",
     cover: "layered-arch.jpg",
     images: ["layered-arch.jpg"],
@@ -73,8 +73,8 @@ window.AWAN_PRODUCTS = [
   },
   {
     id: "wabisabi-set",
-    name: "Wabi Sabi Set",
-    price: 109,
+    name: "Wabi Sabi",
+    price: 55,
     currency: "€",
     cover: "wabisabi-set.jpg",
     images: ["wabisabi-set.jpg"],
@@ -83,8 +83,8 @@ window.AWAN_PRODUCTS = [
   },
   {
     id: "textured-set",
-    name: "Textured Set",
-    price: 105,
+    name: "Textured ",
+    price: 59,
     currency: "€",
     cover: "textured-set.jpg",
     images: ["textured-set.jpg"],
@@ -93,8 +93,8 @@ window.AWAN_PRODUCTS = [
   },
   {
     id: "geometric-set",
-    name: "Geometric Set",
-    price: 97,
+    name: "Geometric",
+    price: 65,
     currency: "€",
     cover: "geometric-set.jpg",
     images: ["geometric-set.jpg"],
